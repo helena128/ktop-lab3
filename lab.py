@@ -21,11 +21,9 @@ def find_nodes(input_data):
         node_dict[node] = node_count
         node_count += 1
     return node_objects, node_dict
-    
 
 def create_matrix(node_objects, node_dict):
 	matrix = [[0 for x in range(len(node_dict))] for y in range(len(node_dict))] 
-	#print(len(matrix[0]))
 	for main_node in node_objects:
 		main_node_idx = int(node_dict.get(main_node[0]))
 		for node in main_node:
@@ -51,13 +49,10 @@ def build_phis(node_marix):
    	 		zero_row_value = int(get_row_number(node_matrix[zero_row]), 2)
    	 		if concat_value | zero_row_value > concat_value:
    	 			concat_value = concat_value | zero_row_value
-   	 			#print('Primary row: ', row_idx, ' Zero row: ', zero_row, ' Value: ', '{0:b}'.format(concat_value))
    	 			cur_phi.append(zero_row)
-   	 		if concat_value == 262143: # TODO: remove hardcoded value
+   	 		if concat_value == int(len(node_matrix) * ('1'), 2):
    	 			phis.append(cur_phi)
-   	 			#print(phis, 'Added: ', cur_phi)
    	 			break
-	#print(phis)
 	return phis
 
 def get_row_number(cur_row):
@@ -75,8 +70,10 @@ def get_phis_nodes(phis, node_dict):
 	for node_row in phis:
 		cur_phi_row = []
 		for node in node_row:
-			cur_phi_row.append(next((val for val, cnt in node_dict.items() if cnt == node), None))
-		phi_names.append(phi_names)
+			node_name = next((val for val, cnt in node_dict.items() if cnt == node), None)
+			#print(node, node_name)
+			cur_phi_row.append(node_name)
+		phi_names.append(cur_phi_row)
 	return phi_names
 
 def create_alpha_matrix(phis):
@@ -97,11 +94,11 @@ if __name__ == '__main__':
     #print(node_objects)
     #print(node_dict)
     node_matrix = create_matrix(node_objects, node_dict)
-    for i in range(0, len(node_dict)):
-    	print(node_matrix[i])
+    #for i in range(0, len(node_dict)):
+    #	print(node_matrix[i])
     phis = build_phis(node_matrix)
-    print('Phis\n', phis)
-    #phi_names = get_phis_nodes(phis, node_dict) #TODO
+    #print('Phis\n', phis)
+    phi_names = get_phis_nodes(phis, node_dict)
     #print(phi_names)
     alpha_matrix = create_alpha_matrix(phis)
-    print(alpha_matrix)
+    #print(alpha_matrix)
